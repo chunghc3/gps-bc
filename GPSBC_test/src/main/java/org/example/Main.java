@@ -1,29 +1,34 @@
 package org.example;
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.scoring.BetweennessCentrality;
-import org.jgrapht.graph.AsSubgraph;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
+import org.jgrapht.graph.*;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        //Type 1
-//        Graph<Node, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-//        Node A = new Node("A","red");
-//        Node B = new Node("B","blue");
-//        Node C = new Node("C","red");
-//        Node D = new Node("D","green");
-//        Node E = new Node("E","red");
-//        Node F = new Node("F","blue");
-//        Node G = new Node("G","blue");
-//        Node H = new Node("H","red");
-//        Node I = new Node("I","green");
-//        Node J = new Node("J","red");
-//        Node K = new Node("K","blue");
-//        Node L = new Node("L","green");
+        ConstraintBType1();
+    }
+
+    public static void ConstraintA(){
+        //Constraint A: Type 1
+//        Graph<NodeA, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+//        NodeA A = new NodeA("A","red");
+//        NodeA B = new NodeA("B","blue");
+//        NodeA C = new NodeA("C","red");
+//        NodeA D = new NodeA("D","green");
+//        NodeA E = new NodeA("E","red");
+//        NodeA F = new NodeA("F","blue");
+//        NodeA G = new NodeA("G","blue");
+//        NodeA H = new NodeA("H","red");
+//        NodeA I = new NodeA("I","green");
+//        NodeA J = new NodeA("J","red");
+//        NodeA K = new NodeA("K","blue");
+//        NodeA L = new NodeA("L","green");
 //
 //        graph.addVertex(A);
 //        graph.addVertex(B);
@@ -60,12 +65,12 @@ public class Main {
 //        graph.addEdge(I, L);
 //        graph.addEdge(L, D);
 
-        //Type 2
-        Graph<Node, DefaultEdge> graph2 = new SimpleGraph<>(DefaultEdge.class);
-        Node A1 = new Node("A","red");
-        Node B1 = new Node("B","red");
-        Node C1 = new Node("C","green");
-        Node D1 = new Node("D","green");
+        //Constraint A: Type 2
+        Graph<NodeA, DefaultEdge> graph2 = new SimpleGraph<>(DefaultEdge.class);
+        NodeA A1 = new NodeA("A","red");
+        NodeA B1 = new NodeA("B","red");
+        NodeA C1 = new NodeA("C","green");
+        NodeA D1 = new NodeA("D","green");
 
         graph2.addVertex(A1);
         graph2.addVertex(B1);
@@ -76,17 +81,17 @@ public class Main {
         graph2.addEdge(B1, D1);
 
         //First sort color
-        Set<Node> filteredNodes = graph2.vertexSet().stream()
+        Set<NodeA> filteredNodes = graph2.vertexSet().stream()
                 .filter(n -> n.getColor() == "green")
                 .collect(Collectors.toSet());
 
         //Post filtering
-        Graph<Node, DefaultEdge> subgraph = new AsSubgraph<>(graph2, filteredNodes);
-        Graph<Node, DefaultEdge> wholeGraph = new AsSubgraph<>(graph2, graph2.vertexSet());
+        Graph<NodeA, DefaultEdge> subgraph = new AsSubgraph<>(graph2, filteredNodes);
+        Graph<NodeA, DefaultEdge> wholeGraph = new AsSubgraph<>(graph2, graph2.vertexSet());
 
-        BetweennessCentrality<Node, DefaultEdge> alg = new BetweennessCentrality<>(subgraph);
+        BetweennessCentrality<NodeA, DefaultEdge> alg = new BetweennessCentrality<>(subgraph);
 
-        Map<Node, Double> scores = alg.getScores();
+        Map<NodeA, Double> scores = alg.getScores();
         scores.forEach(
                 (node, score) -> {
                     if (node.getColor() == "green") {
@@ -95,20 +100,118 @@ public class Main {
                 }
         );
 
-        Node mostCentral = scores.entrySet().stream()
+        NodeA mostCentral = scores.entrySet().stream()
                 .max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey)
                 .orElse(null);
 
         System.out.println("Most central: " + mostCentral.getName());
-        System.out.println("Most central: " + mostCentral.getName());
     }
 
-    public static class Node{
+    public static void ConstraintBType1(){
+        Graph<NodeB, DefaultWeightedEdge> graphB1 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+
+        //Graph B
+        NodeB MUC = new NodeB("MUC");
+        NodeB YVR = new NodeB("YVR");
+        NodeB CDG = new NodeB("CDG");
+        NodeB HND = new NodeB("HND");
+        NodeB TPE = new NodeB("TPE");
+        NodeB CAI = new NodeB("CAI");
+        NodeB DEN = new NodeB("DEN");
+        NodeB MNL = new NodeB("MNL");
+        NodeB IST = new NodeB("IST");
+        NodeB LAX = new NodeB("LAX");
+        NodeB ICN = new NodeB("ICN");
+        NodeB JFK = new NodeB("JFK");
+        NodeB OSL = new NodeB("OSL");
+        NodeB DUB = new NodeB("DUB");
+        NodeB SIN = new NodeB("SIN");
+
+        graphB1.addVertex(MUC);
+        graphB1.addVertex(YVR);
+        graphB1.addVertex(CDG);
+        graphB1.addVertex(HND);
+        graphB1.addVertex(TPE);
+        graphB1.addVertex(CAI);
+        graphB1.addVertex(DEN);
+        graphB1.addVertex(MNL);
+        graphB1.addVertex(IST);
+        graphB1.addVertex(LAX);
+        graphB1.addVertex(ICN);
+        graphB1.addVertex(JFK);
+        graphB1.addVertex(OSL);
+        graphB1.addVertex(DUB);
+        graphB1.addVertex(SIN);
+
+        Graphs.addEdge(graphB1,MUC,HND,60);
+        Graphs.addEdge(graphB1,MUC,OSL,100);
+        Graphs.addEdge(graphB1,YVR,SIN,230);
+        Graphs.addEdge(graphB1,YVR,TPE,500);
+        Graphs.addEdge(graphB1,YVR,IST,160);
+        Graphs.addEdge(graphB1,CDG,HND,130);
+        Graphs.addEdge(graphB1,CDG,MNL,130);
+        Graphs.addEdge(graphB1,HND,TPE,90);
+        Graphs.addEdge(graphB1,TPE,JFK,320);
+        Graphs.addEdge(graphB1,TPE,LAX,240);
+        Graphs.addEdge(graphB1,CDG,HND,130);
+        Graphs.addEdge(graphB1,CAI,DEN,310);
+        Graphs.addEdge(graphB1,CAI,DUB,80);
+        Graphs.addEdge(graphB1,CAI,ICN,110);
+        Graphs.addEdge(graphB1,ICN,DEN,220);
+        Graphs.addEdge(graphB1,DEN,OSL,320);
+        Graphs.addEdge(graphB1,LAX,ICN,430);
+        Graphs.addEdge(graphB1,LAX,OSL,270);
+        Graphs.addEdge(graphB1,LAX,IST,290);
+        Graphs.addEdge(graphB1,IST,DUB,180);
+        Graphs.addEdge(graphB1,LAX,DUB,190);
+        Graphs.addEdge(graphB1,JFK,OSL,300);
+        Graphs.addEdge(graphB1,OSL,SIN,310);
+
+        //ConstraintB: Type 1
+        double pathPriceLimit = 1000;
+
+        //For each node in graphB1
+        for(NodeB node : new ArrayList<>(graphB1.vertexSet())){
+            //For each edge in node
+            for (DefaultWeightedEdge edge : graphB1.edgesOf(node)){
+                //If edge weight is greater than pathPriceLimit
+                if (graphB1.getEdgeWeight(edge) > pathPriceLimit){
+                    //Remove the node
+                    graphB1.removeVertex(node);
+                    break;
+                }
+            }
+        }
+
+        //Initialize BC
+        BetweennessCentrality<NodeB, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphB1, true);
+        Map<NodeB, Double> scores = bc.getScores();
+        scores.entrySet().stream()
+                .sorted(Map.Entry.<NodeB, Double>comparingByValue().reversed())
+                .forEach(e -> System.out.println(e.getKey().getAirportName() + ": " + e.getValue()));
+//        for(NodeB node : new ArrayList<>(graphB1.vertexSet())){
+//            System.out.println(node.getAirportName() + " = " + scores.get(node));
+//        }
+    }
+
+    //Node Classes
+
+    public static class NodeB{
+        private String airportName;
+
+        public NodeB(String airportName){
+            this.airportName = airportName;
+        }
+
+        public String getAirportName() {return airportName;}
+    }
+
+    public static class NodeA{
         private String color;
         private String name;
 
-        public Node(String name, String color)
+        public NodeA(String name, String color)
         {
             this.color = color;
             this.name = name;
