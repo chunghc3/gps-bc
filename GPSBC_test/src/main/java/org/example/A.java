@@ -1,30 +1,34 @@
 package org.example;
 
 import org.jgrapht.Graph;
+import org.jgrapht.Graphs;
 import org.jgrapht.alg.scoring.BetweennessCentrality;
 import org.jgrapht.graph.AsSubgraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleGraph;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class A {
-    public static void initGraphA(){
-        Graph<NodeColor, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
-        NodeColor A = new NodeColor("A","red");
-        NodeColor B = new NodeColor("B","blue");
-        NodeColor C = new NodeColor("C","red");
-        NodeColor D = new NodeColor("D","green");
-        NodeColor E = new NodeColor("E","red");
-        NodeColor F = new NodeColor("F","blue");
-        NodeColor G = new NodeColor("G","blue");
-        NodeColor H = new NodeColor("H","red");
-        NodeColor I = new NodeColor("I","green");
-        NodeColor J = new NodeColor("J","red");
-        NodeColor K = new NodeColor("K","blue");
-        NodeColor L = new NodeColor("L","green");
+    static Graph<NodeColor, DefaultEdge> graph = new SimpleGraph<>(DefaultEdge.class);
+
+    static {
+        NodeColor A = new NodeColor("A", "red");
+        NodeColor B = new NodeColor("B", "blue");
+        NodeColor C = new NodeColor("C", "red");
+        NodeColor D = new NodeColor("D", "green");
+        NodeColor E = new NodeColor("E", "red");
+        NodeColor F = new NodeColor("F", "blue");
+        NodeColor G = new NodeColor("G", "blue");
+        NodeColor H = new NodeColor("H", "red");
+        NodeColor I = new NodeColor("I", "green");
+        NodeColor J = new NodeColor("J", "red");
+        NodeColor K = new NodeColor("K", "blue");
+        NodeColor L = new NodeColor("L", "green");
 
         graph.addVertex(A);
         graph.addVertex(B);
@@ -61,55 +65,47 @@ public class A {
         graph.addEdge(I, L);
         graph.addEdge(L, D);
     }
-    public static void ConstraintA1(Graph graph){
-        /* Finish */
+
+    public static void ConstraintA1() {
+        //Constraint A, Type 1: Finding BC for all nodes of <color> /* Most BC values are 0.0? Not tested yet */
+        Graph<NodeColor, DefaultEdge> graphA1 = new SimpleGraph<>(DefaultEdge.class);
+        Graphs.addGraph(graphA1, graph);
+
+        for (NodeColor nodeX : graph.vertexSet()) {
+            if (nodeX.getColor() != "green") {
+                graphA1.removeVertex(nodeX);
+            }
+        }
+        BetweennessCentrality<NodeColor, DefaultEdge> bc = new BetweennessCentrality<>(graphA1);
+        Map<NodeColor, Double> scores = bc.getScores();
+        scores.entrySet().stream()
+                .sorted(Map.Entry.<NodeColor, Double>comparingByValue().reversed())
+                .forEach(e -> System.out.println(e.getKey().getName() + ": " + e.getValue()));
+
     }
 
-    public static void ConstraintA(){
+    public static void ConstraintA2() {
+        //Constraint A, Type 2: Finding most important node that is <color> /* Completed: Need verification, high BC values */
 
+        Graph<NodeColor, DefaultEdge> graphA2 = new SimpleGraph<>(DefaultEdge.class);
 
+        //Copy graph into graphA2
+        Graphs.addGraph(graphA2, graph);
 
-        //Constraint A: Type 2
-        Graph<NodeColor, DefaultEdge> graph2 = new SimpleGraph<>(DefaultEdge.class);
+        //Calculate BC for graphA2
+        BetweennessCentrality<NodeColor, DefaultEdge> alg = new BetweennessCentrality<>(graphA2);
 
-        NodeColor A1 = new NodeColor("A","red");
-        NodeColor B1 = new NodeColor("B","red");
-        NodeColor C1 = new NodeColor("C","green");
-        NodeColor D1 = new NodeColor("D","green");
-
-        graph2.addVertex(A1);
-        graph2.addVertex(B1);
-        graph2.addVertex(C1);
-        graph2.addVertex(D1);
-        graph2.addEdge(A1, C1);
-        graph2.addEdge(C1, B1);
-        graph2.addEdge(B1, D1);
-
-        //First sort color
-        Set<NodeColor> filteredNodes = graph2.vertexSet().stream()
-                .filter(n -> n.getColor() == "green")
-                .collect(Collectors.toSet());
-
-        //Post filtering
-        Graph<NodeColor, DefaultEdge> subgraph = new AsSubgraph<>(graph2, filteredNodes);
-        Graph<NodeColor, DefaultEdge> wholeGraph = new AsSubgraph<>(graph2, graph2.vertexSet());
-
-        BetweennessCentrality<NodeColor, DefaultEdge> alg = new BetweennessCentrality<>(subgraph);
-
+        //Filter by <color>
+        //Note: Custom color can be used to filter
         Map<NodeColor, Double> scores = alg.getScores();
-        scores.forEach(
-                (node, score) -> {
-                    if (node.getColor() == "green") {
-                        System.out.println(node.getName() + " -> " + score);
-                    }
-                }
-        );
-
-        NodeColor mostCentral = scores.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse(null);
-
-        System.out.println("Most central: " + mostCentral.getName());
+        scores.entrySet().stream()
+                .sorted(Map.Entry.<NodeColor, Double>comparingByValue().reversed())
+                .forEach(
+                        (node) -> {
+                            if (node.getKey().getColor() == "red") {
+                                System.out.println(node.getKey().getName() + " -> " + node.getValue());
+                            }
+                        }
+                );
     }
 }

@@ -1,0 +1,5 @@
+4/8
+- Constraints A, B, C formatted/organized
+- NodeA was renamed to NodeColor and NodeB was renamed to NodeAirport
+- Each constraint uses a copy of the original graph instead of working on the original graph itself
+- Now, main method only executes functions

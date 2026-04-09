@@ -1,6 +1,7 @@
 package org.example;
 
 import org.jgrapht.Graph;
+import org.jgrapht.GraphPath;
 import org.jgrapht.Graphs;
 import org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm;
 import org.jgrapht.alg.scoring.BetweennessCentrality;
@@ -8,13 +9,10 @@ import org.jgrapht.alg.shortestpath.DijkstraManyToManyShortestPaths;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class B {
-    static Graph<NodeAirport, DefaultWeightedEdge> graphB = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+    static Graph<NodeAirport, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
     static NodeAirport MUC = new NodeAirport("MUC");
     static NodeAirport YVR = new NodeAirport("YVR");
@@ -33,66 +31,71 @@ public class B {
     static NodeAirport SIN = new NodeAirport("SIN");
 
     static{
-        graphB.addVertex(MUC);
-        graphB.addVertex(YVR);
-        graphB.addVertex(CDG);
-        graphB.addVertex(HND);
-        graphB.addVertex(TPE);
-        graphB.addVertex(CAI);
-        graphB.addVertex(DEN);
-        graphB.addVertex(MNL);
-        graphB.addVertex(IST);
-        graphB.addVertex(LAX);
-        graphB.addVertex(ICN);
-        graphB.addVertex(JFK);
-        graphB.addVertex(OSL);
-        graphB.addVertex(DUB);
-        graphB.addVertex(SIN);
+        graph.addVertex(MUC);
+        graph.addVertex(YVR);
+        graph.addVertex(CDG);
+        graph.addVertex(HND);
+        graph.addVertex(TPE);
+        graph.addVertex(CAI);
+        graph.addVertex(DEN);
+        graph.addVertex(MNL);
+        graph.addVertex(IST);
+        graph.addVertex(LAX);
+        graph.addVertex(ICN);
+        graph.addVertex(JFK);
+        graph.addVertex(OSL);
+        graph.addVertex(DUB);
+        graph.addVertex(SIN);
 
-        Graphs.addEdge(graphB,MUC,HND,60);
-        Graphs.addEdge(graphB,MUC,OSL,100);
-        Graphs.addEdge(graphB,YVR,SIN,230);
-        Graphs.addEdge(graphB,YVR,TPE,500);
-        Graphs.addEdge(graphB,YVR,IST,160);
-        Graphs.addEdge(graphB,CDG,HND,130);
-        Graphs.addEdge(graphB,CDG,MNL,130);
-        Graphs.addEdge(graphB,HND,TPE,90);
-        Graphs.addEdge(graphB,TPE,JFK,320);
-        Graphs.addEdge(graphB,TPE,LAX,240);
-        Graphs.addEdge(graphB,CDG,HND,130);
-        Graphs.addEdge(graphB,CAI,DEN,310);
-        Graphs.addEdge(graphB,CAI,DUB,80);
-        Graphs.addEdge(graphB,CAI,ICN,110);
-        Graphs.addEdge(graphB,ICN,DEN,220);
-        Graphs.addEdge(graphB,DEN,OSL,320);
-        Graphs.addEdge(graphB,LAX,ICN,430);
-        Graphs.addEdge(graphB,LAX,OSL,270);
-        Graphs.addEdge(graphB,LAX,IST,290);
-        Graphs.addEdge(graphB,IST,DUB,180);
-        Graphs.addEdge(graphB,LAX,DUB,190);
-        Graphs.addEdge(graphB,JFK,OSL,300);
-        Graphs.addEdge(graphB,OSL,SIN,310);
+        Graphs.addEdge(graph,MUC,HND,60);
+        Graphs.addEdge(graph,MUC,OSL,100);
+        Graphs.addEdge(graph,YVR,SIN,230);
+        Graphs.addEdge(graph,YVR,TPE,500);
+        Graphs.addEdge(graph,YVR,IST,160);
+        Graphs.addEdge(graph,CDG,HND,130);
+        Graphs.addEdge(graph,CDG,MNL,130);
+        Graphs.addEdge(graph,HND,TPE,90);
+        Graphs.addEdge(graph,TPE,JFK,320);
+        Graphs.addEdge(graph,TPE,LAX,240);
+        Graphs.addEdge(graph,CDG,HND,130);
+        Graphs.addEdge(graph,CAI,DEN,310);
+        Graphs.addEdge(graph,CAI,DUB,80);
+        Graphs.addEdge(graph,CAI,ICN,110);
+        Graphs.addEdge(graph,ICN,DEN,220);
+        Graphs.addEdge(graph,DEN,OSL,320);
+        Graphs.addEdge(graph,LAX,ICN,430);
+        Graphs.addEdge(graph,LAX,OSL,270);
+        Graphs.addEdge(graph,LAX,IST,290);
+        Graphs.addEdge(graph,IST,DUB,180);
+        Graphs.addEdge(graph,LAX,DUB,190);
+        Graphs.addEdge(graph,JFK,OSL,300);
+        Graphs.addEdge(graph,OSL,SIN,310);
     }
 
     public static void ConstraintB1(){
-        /* Constrint B, Type 1: Weight Restriction on EDGE*/
+        /* Constraint B, Type 1: Weight Restriction on EDGE*/ /* Completed: edge removal verified*/
+        Graph<NodeAirport, DefaultWeightedEdge> graphB1 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        Graphs.addGraph(graphB1, graph);
 
-        double pathPriceLimit = 1000;
+        //Note: Custom limit for edge
+        double edgePriceLimit = 400;
 
-        //For each node in graphB1
-        for(NodeAirport node : new ArrayList<>(graphB.vertexSet())) {
-            //For each edge in node
-            for (DefaultWeightedEdge edge : graphB.edgesOf(node)) {
-                //If edge weight is greater than pathPriceLimit
-                if (graphB.getEdgeWeight(edge) > pathPriceLimit) {
-                    //Remove the node
-                    graphB.removeVertex(node);
-                    break;
-                }
+        //Set to target nodes for removal
+        Set<NodeAirport> remove = new HashSet<>();
+
+        //For each edge in graphB1
+        for(DefaultWeightedEdge edge: graphB1.edgeSet()){
+            //If the cost of the edge is greater than edgePriceLimit
+            if (graphB1.getEdgeWeight(edge) > edgePriceLimit) {
+                //Mark edge source node for removal
+                remove.add(graphB1.getEdgeSource(edge));
+                //Mark edge target node for removal
+                remove.add(graphB1.getEdgeTarget(edge));
             }
         }
+        remove.forEach(graphB1::removeVertex);
 
-        BetweennessCentrality<NodeAirport, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphB, true);
+        BetweennessCentrality<NodeAirport, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphB1, true);
         Map<NodeAirport, Double> scores = bc.getScores();
         scores.entrySet().stream()
                 .sorted(Map.Entry.<NodeAirport, Double>comparingByValue().reversed())
@@ -100,11 +103,13 @@ public class B {
     }
 
     public static void ConstraintB2(){
-        /* Constraint B, Type 2: Weight Restriction on PATH */
+        /* Constraint B, Type 2: Weight Restriction on PATH */ /* Completed */
 
+        //Note: Custom limit for path cost
         double pathCostLimit = 400;
 
-        DijkstraManyToManyShortestPaths<NodeAirport, DefaultWeightedEdge> manyToMany = new DijkstraManyToManyShortestPaths<>(graphB);
+        //Note: Custom sources and targets
+        DijkstraManyToManyShortestPaths<NodeAirport, DefaultWeightedEdge> manyToMany = new DijkstraManyToManyShortestPaths<>(graph);
         Set<NodeAirport> sources = Set.of(MUC, YVR, CDG, HND, TPE, CAI, DEN, MNL, IST, LAX, ICN, JFK, OSL, DUB, SIN);
         Set<NodeAirport> targets = Set.of(MUC, YVR, CDG, HND, TPE, CAI, DEN, MNL, IST, LAX, ICN, JFK, OSL, DUB, SIN);
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<NodeAirport, DefaultWeightedEdge> paths = manyToMany.getManyToManyPaths(sources, targets);

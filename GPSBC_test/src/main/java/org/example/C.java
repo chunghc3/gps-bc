@@ -28,7 +28,7 @@ public class C {
     static NodeAirport DUB = new NodeAirport("DUB");
     static NodeAirport SIN = new NodeAirport("SIN");
 
-    static{
+    static {
         graph.addVertex(MUC);
         graph.addVertex(YVR);
         graph.addVertex(CDG);
@@ -45,61 +45,64 @@ public class C {
         graph.addVertex(DUB);
         graph.addVertex(SIN);
 
-        Graphs.addEdge(graph,MUC,HND,60);
-        Graphs.addEdge(graph,MUC,OSL,100);
-        Graphs.addEdge(graph,YVR,SIN,230);
-        Graphs.addEdge(graph,YVR,TPE,500);
-        Graphs.addEdge(graph,YVR,IST,160);
-        Graphs.addEdge(graph,CDG,HND,130);
-        Graphs.addEdge(graph,CDG,MNL,130);
-        Graphs.addEdge(graph,HND,TPE,90);
-        Graphs.addEdge(graph,TPE,JFK,320);
-        Graphs.addEdge(graph,TPE,LAX,240);
-        Graphs.addEdge(graph,CDG,HND,130);
-        Graphs.addEdge(graph,CAI,DEN,310);
-        Graphs.addEdge(graph,CAI,DUB,80);
-        Graphs.addEdge(graph,CAI,ICN,110);
-        Graphs.addEdge(graph,ICN,DEN,220);
-        Graphs.addEdge(graph,DEN,OSL,320);
-        Graphs.addEdge(graph,LAX,ICN,430);
-        Graphs.addEdge(graph,LAX,OSL,270);
-        Graphs.addEdge(graph,LAX,IST,290);
-        Graphs.addEdge(graph,IST,DUB,180);
-        Graphs.addEdge(graph,LAX,DUB,190);
-        Graphs.addEdge(graph,JFK,OSL,300);
-        Graphs.addEdge(graph,OSL,SIN,310);
+        Graphs.addEdge(graph, MUC, HND, 60);
+        Graphs.addEdge(graph, MUC, OSL, 100);
+        Graphs.addEdge(graph, YVR, SIN, 230);
+        Graphs.addEdge(graph, YVR, TPE, 500);
+        Graphs.addEdge(graph, YVR, IST, 160);
+        Graphs.addEdge(graph, CDG, HND, 130);
+        Graphs.addEdge(graph, CDG, MNL, 130);
+        Graphs.addEdge(graph, HND, TPE, 90);
+        Graphs.addEdge(graph, TPE, JFK, 320);
+        Graphs.addEdge(graph, TPE, LAX, 240);
+        Graphs.addEdge(graph, CDG, HND, 130);
+        Graphs.addEdge(graph, CAI, DEN, 310);
+        Graphs.addEdge(graph, CAI, DUB, 80);
+        Graphs.addEdge(graph, CAI, ICN, 110);
+        Graphs.addEdge(graph, ICN, DEN, 220);
+        Graphs.addEdge(graph, DEN, OSL, 320);
+        Graphs.addEdge(graph, LAX, ICN, 430);
+        Graphs.addEdge(graph, LAX, OSL, 270);
+        Graphs.addEdge(graph, LAX, IST, 290);
+        Graphs.addEdge(graph, IST, DUB, 180);
+        Graphs.addEdge(graph, LAX, DUB, 190);
+        Graphs.addEdge(graph, JFK, OSL, 300);
+        Graphs.addEdge(graph, OSL, SIN, 310);
     }
 
-    public static void ConstraintC1(){
-        /* Constraint C, Type 1: DEGREE of nodes */
+    public static void ConstraintC1() {
+        /* Constraint C, Type 1: DEGREE of nodes */ /* Completed */
 
-        //Filter out nodes by degree first, then run BC
-        Graph<NodeAirport, DefaultWeightedEdge> C1Graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addGraph(C1Graph, graph);
-        BetweennessCentrality<NodeAirport, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graph, true);
-        Map<NodeAirport, Double> scores = bc.getScores();
+        Graph<NodeAirport, DefaultWeightedEdge> graphC1 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
+        //Creates copy of graph
+        Graphs.addGraph(graphC1, graph);
 
-        //For each node in graph
-        NodeAirport greatest = MUC;
-        for(NodeAirport node : new ArrayList<>(C1Graph.vertexSet())){
-            int degree = C1Graph.degreeOf(node);
-            //If the degree and score of node is greater than the greatest node, node become greatest
-            if(degree >= C1Graph.degreeOf(node)){
-                greatest = node;
+        //Note: Custom limit of degrees for each node
+        int degreeLimit = 3;
+        for (NodeAirport node : new ArrayList<>(graphC1.vertexSet())) {
+            //If the degree of node is less than degreeLimit, remove the node
+            if (graphC1.degreeOf(node) < degreeLimit) {
+                graphC1.removeVertex(node);
             }
         }
 
-        System.out.println("Constraint C1: Among all the airports, which is the most busiest airport?");
-        System.out.println(greatest.getAirportName() + ": " + scores.get(greatest));
+        //Prints out all scores from highest to lowest
+        BetweennessCentrality<NodeAirport, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphC1, true);
+        Map<NodeAirport, Double> scores = bc.getScores();
+        scores.entrySet().stream()
+                .sorted(Map.Entry.<NodeAirport, Double>comparingByValue().reversed())
+                .forEach(e -> System.out.println(e.getKey().getAirportName() + ": " + e.getValue()));
     }
 
-    public static void ConstraintC2(){
+    public static void ConstraintC2() {
+        /* Constraint C, Type 2: DEGREE of nodes */ /* Completed */
+
         BetweennessCentrality<NodeAirport, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graph, true);
         Map<NodeAirport, Double> scores = bc.getScores();
         scores.forEach(
                 (node, score) -> {
                     /* Filters by degree*/
-                    if(graph.degreeOf(node) <= 3) {
+                    if (graph.degreeOf(node) <= 3) {
                         System.out.println(node.getAirportName() + ": " + score);
                     }
                 }
