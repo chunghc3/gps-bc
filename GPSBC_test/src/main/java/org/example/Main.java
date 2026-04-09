@@ -9,13 +9,15 @@ import java.util.*;
 
 import static org.example.A.ConstraintA1;
 import static org.example.A.ConstraintA2;
+import static org.example.AB.ConstraintA1B2;
 import static org.example.B.ConstraintB1;
 import static org.example.B.ConstraintB2;
+import static org.example.BC.*;
 import static org.example.C.ConstraintC1;
 import static org.example.C.ConstraintC2;
 
 public class Main {
     public static void main(String[] args) {
-        ConstraintA2();
+        ConstraintB2C2();
     }
 }

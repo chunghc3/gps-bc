@@ -78,7 +78,7 @@ public class B {
         Graphs.addGraph(graphB1, graph);
 
         //Note: Custom limit for edge
-        double edgePriceLimit = 400;
+        double edgePriceLimit = 500;
 
         //Set to target nodes for removal
         Set<NodeAirport> remove = new HashSet<>();
