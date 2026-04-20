@@ -94,7 +94,6 @@ public class A {
 
         //Calculate BC for graphA2
         BetweennessCentrality<NodeColor, DefaultEdge> alg = new BetweennessCentrality<>(graphA2);
-
         //Filter by <color>
         //Note: Custom color can be used to filter
         Map<NodeColor, Double> scores = alg.getScores();

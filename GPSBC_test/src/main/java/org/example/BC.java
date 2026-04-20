@@ -83,7 +83,6 @@ public class BC {
 
         Set<NodeAirport> remove = new HashSet<>();
         for (NodeAirport nodeX : new ArrayList<>(graphB1.vertexSet())) {
-            boolean markDelete = false;
             for (DefaultWeightedEdge edgeX : graphB1.edgesOf(nodeX)) {
                 if (graphB1.getEdgeWeight(edgeX) > edgePriceLimit) {
                     remove.add(nodeX);
@@ -112,9 +111,6 @@ public class BC {
 
         Graph<NodeAirport, DefaultWeightedEdge> graphB1 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         Graphs.addGraph(graphB1, graph);
-
-        Graph<NodeAirport, DefaultWeightedEdge> test = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-        Graphs.addGraph(test, graph);
 
         //Note: Custom limit for edge
         double edgePriceLimit = 430;

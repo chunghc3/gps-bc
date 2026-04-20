@@ -9,10 +9,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 import org.w3c.dom.Node;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class AB {
     //Constraints: Color <zone> + Edge weight restriction
@@ -83,6 +80,7 @@ public class AB {
         double edgePriceLimit = 500;
         int specifiedZone = 3;
 
+        Set<NodeAirport> remove = new HashSet<>();
         //For each node in graphA1B1
         for (NodeAirport node : new ArrayList<>(graphAB.vertexSet())) {
             //If the node is in the specified Zone
@@ -92,15 +90,15 @@ public class AB {
                     //If edge weight is greater than pathPriceLimit
                     if (graphAB.getEdgeWeight(edge) > edgePriceLimit) {
                         //Remove the node
-                        graphAB.removeVertex(node);
+                        remove.add(node);
                         break;
                     }
                 }
             } else {
-                graphAB.removeVertex(node);
+                remove.add(node);
             }
         }
-
+        remove.forEach(graphAB::removeVertex);
         BetweennessCentrality<NodeAirport, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphAB, true);
         Map<NodeAirport, Double> scores = bc.getScores();
         scores.entrySet().stream()
@@ -131,33 +129,7 @@ public class AB {
             }
         }
 
-
-//        for(NodeAirport x : sources){
-//            System.out.print(x.getAirportName() + " ");
-//        }
-//        System.out.println();
-//        for(NodeAirport x : targets){
-//            System.out.print(x.getAirportName() + " ");
-//        }
-//        System.out.println();
-//        for(NodeAirport x : graphAB.vertexSet()){
-//            System.out.print(x.getAirportName() + " ");
-//        }
-//        System.out.println();
-//        System.out.println();
-
-
-
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<NodeAirport, DefaultWeightedEdge> paths = manyToMany.getManyToManyPaths(sources, targets);
-
-//        for(NodeAirport x : paths.getSources()){
-//            System.out.print(x.getAirportName() + " ");
-//        }
-//        System.out.println();
-//        for(NodeAirport x : paths.getTargets()){
-//            System.out.print(x.getAirportName() + " ");
-//        }
-//        System.out.println();
 
         double numShortestPath = 0;
         Map<NodeAirport, Integer> count = new HashMap<>();
