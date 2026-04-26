@@ -44,7 +44,7 @@ public class Main {
         //Graph<Node, DefaultWeightedEdge> g = gen.generate(100, 0.6, 1000.0);
         //C
         //A1C2
-        Graph<Node, DefaultWeightedEdge> g = gen.generate(100, 0.7, 1000.0);
+        Graph<Node, DefaultWeightedEdge> g = gen.generate(100, 0.7, 1.0);
         try {
             GraphExporter.toJson(g, "graphB2.100.json");
         } catch (Exception e) {

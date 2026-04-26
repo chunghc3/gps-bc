@@ -66,6 +66,7 @@ public class B {
         Map<Node, Integer> count = new HashMap<>();
         for(Node source : sources){
             for(Node target : targets){
+                System.out.println("Source: " + source.getNodeNumber() + ", Target: " + target.getNodeNumber() + "path weight: " + paths.getWeight(source, target));
                 if(source != target && paths.getWeight(source, target) > pathWeightLimit){
                     numShortestPath++;
                     for(Node vertex : paths.getPath(source, target).getVertexList()){
