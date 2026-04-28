@@ -139,7 +139,7 @@ public class AB {
         for(Node source : sources){
             for(Node target : targets){
                 //Can you find the top-10 busiest airports given there’s no connecting ticket price higher than pathCostLimit
-                if(source != target && paths.getWeight(source, target) <= pathCostLimit){
+                if(source != target && paths.getWeight(source, target) < pathCostLimit){
                     numShortestPath++;
                     for(Node vertex : paths.getPath(source, target).getVertexList()){
                         //Update vertex count

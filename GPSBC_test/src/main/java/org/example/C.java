@@ -40,15 +40,11 @@ public class C {
     public static void ConstraintC2(Graph<Node, DefaultWeightedEdge> graph, int degreeLimit) {
         /* Constraint C, Type 2: DEGREE of nodes */ /* Completed */
 
-        BetweennessCentrality<Node, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graph, true);
+        BetweennessCentrality<Node, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graph);
         Map<Node, Double> scores = bc.getScores();
-        scores.forEach(
-                (node, score) -> {
-                    /* Filters by degree*/
-                    if (graph.degreeOf(node) <= degreeLimit) {
-                        System.out.println(node.getNodeNumber() + ": " + score);
-                    }
-                }
-        );
+        scores.entrySet().stream()
+                .filter(e -> graph.degreeOf(e.getKey()) <= degreeLimit)
+                .sorted(Map.Entry.<Node, Double>comparingByValue().reversed())
+                .forEach(e -> System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue()));
     }
 }

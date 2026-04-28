@@ -91,7 +91,7 @@ public class A {
         //Note: Custom color can be used to filter
         Map<Node, Double> scores = alg.getScores();
         scores.entrySet().stream()
-                .sorted(Map.Entry.<Node, Double>comparingByValue().reversed())
+                .sorted(Map.Entry.<Node, Double>comparingByValue())
                 .forEach(
                         (node) -> {
                             if (node.getKey().getZone() == specifiedZone) {

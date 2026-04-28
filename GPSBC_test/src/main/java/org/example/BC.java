@@ -118,7 +118,7 @@
 //        Set<Node> remove = new HashSet<>();
 //        for (Node nodeX : new ArrayList<>(graphB1.vertexSet())) {
 //            for (DefaultWeightedEdge edgeX : graphB1.edgesOf(nodeX)) {
-//                if (graphB1.getEdgeWeight(edgeX) <= edgePriceLimit && graphB1.degreeOf(nodeX) <= edgeNumberLimit) {
+//                if (graphB1.getEdgeWeight(edgeX) < edgePriceLimit && graphB1.degreeOf(nodeX) < edgeNumberLimit) {
 //                    remove.add(nodeX);
 //                }
 //            }
@@ -210,7 +210,7 @@
 //        count.entrySet().stream()
 //                .sorted(Map.Entry.<Node, Integer>comparingByValue().reversed())
 //                .forEach(e -> {
-//                            if (graph.degreeOf(e.getKey()) > 2) {
+//                            if (graph.degreeOf(e.getKey()) < 2) {
 //                                System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue() / shortPathTemp);
 //                            }
 //                        }

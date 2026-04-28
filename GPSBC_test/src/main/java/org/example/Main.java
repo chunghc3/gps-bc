@@ -38,22 +38,16 @@ public class Main {
         GraphGenerator gen = new GraphGenerator();
 
         //vertices, edge probability, weights up to
-        //A
-        // Graph<Node, DefaultWeightedEdge> g = gen.generate(100, 0.4, 100.0);
-        //B
-        //Graph<Node, DefaultWeightedEdge> g = gen.generate(100, 0.6, 1000.0);
-        //C
-        //A1C2
-        Graph<Node, DefaultWeightedEdge> g = gen.generate(100, 0.7, 1.0);
+        Graph<Node, DefaultWeightedEdge> g = gen.generate(500, 0.9, 1000.0);
         try {
-            GraphExporter.toJson(g, "graphB2.100.json");
+            GraphExporter.toJson(g, "graphC2.500.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         long start = System.nanoTime();
         //FUNCTION
-        ConstraintB2(g, 700);
+        ConstraintC2(g, 700);
         //FUNCTION END
         long end = System.nanoTime();
         long durationNs = end - start;
@@ -149,7 +143,7 @@ class GraphGenerator {
             for (int j = i + 1; j < vertexCount; j++) {
                 if (random.nextDouble() < edgeProbability) {
                     DefaultWeightedEdge e = graph.addEdge(vertices.get(i), vertices.get(j));
-                    graph.setEdgeWeight(e, random.nextDouble() * maxWeight);
+                    graph.setEdgeWeight(e, maxWeight);
                 }
             }
         }
