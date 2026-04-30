@@ -22,11 +22,15 @@ import static org.example.A.ConstraintA1;
 import static org.example.A.ConstraintA2;
 //import static org.example.A.ConstraintA2;
 //import static org.example.AB.ConstraintA1B2;
+import static org.example.AB.ConstraintA1B1;
+import static org.example.AB.ConstraintA1B2;
 import static org.example.AC.ConstraintA1C2;
 import static org.example.AC.ConstraintA1C1;
 import static org.example.B.ConstraintB1;
 import static org.example.B.ConstraintB2;
 //import static org.example.BC.*;
+import static org.example.BC.ConstraintB2C1;
+import static org.example.BC.ConstraintB2C2;
 import static org.example.C.ConstraintC1;
 import static org.example.C.ConstraintC2;
 
@@ -38,85 +42,22 @@ public class Main {
         GraphGenerator gen = new GraphGenerator();
 
         //vertices, edge probability, weights up to
-        Graph<Node, DefaultWeightedEdge> g = gen.generate(500, 0.9, 1000.0);
+        Graph<Node, DefaultWeightedEdge> g = gen.generate(500, 0.7, 1000.0);
         try {
-            GraphExporter.toJson(g, "graphC2.500.json");
+            GraphExporter.toJson(g, "graphA1C2.500.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         long start = System.nanoTime();
         //FUNCTION
-        ConstraintC2(g, 700);
+        ConstraintA1C2(g, 2, 21);
         //FUNCTION END
         long end = System.nanoTime();
         long durationNs = end - start;
 
         System.out.println("Time taken: " + durationNs + " ns");
         System.out.println("Time taken: " + (durationNs / 1_000_000.0) + " ms");
-    }
-
-    public static void regularTest(){
-             Graph<Node, DefaultWeightedEdge> graph = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
-
-     Node MUC = new Node(1,1);
-     Node YVR = new Node(2,1);
-     Node CDG = new Node(3,3);
-     Node HND = new Node(4,2);
-     Node TPE = new Node(5,3);
-     Node CAI = new Node(6,1);
-     Node DEN = new Node(67,2);
-     Node MNL = new Node(7,3);
-     Node IST = new Node(8,1);
-     Node LAX = new Node(9,1);
-     Node ICN = new Node(10,3);
-     Node JFK = new Node(11,1);
-     Node OSL = new Node(12,2);
-     Node DUB = new Node(13,1);
-     Node SIN = new Node(14,3);
-
-
-        graph.addVertex(MUC);
-        graph.addVertex(YVR);
-        graph.addVertex(CDG);
-        graph.addVertex(HND);
-        graph.addVertex(TPE);
-        graph.addVertex(CAI);
-        graph.addVertex(DEN);
-        graph.addVertex(MNL);
-        graph.addVertex(IST);
-        graph.addVertex(LAX);
-        graph.addVertex(ICN);
-        graph.addVertex(JFK);
-        graph.addVertex(OSL);
-        graph.addVertex(DUB);
-        graph.addVertex(SIN);
-
-        Graphs.addEdge(graph,MUC,HND,60);
-        Graphs.addEdge(graph,MUC,OSL,100);
-        Graphs.addEdge(graph,YVR,SIN,230);
-        Graphs.addEdge(graph,YVR,TPE,500);
-        Graphs.addEdge(graph,YVR,IST,160);
-        Graphs.addEdge(graph,CDG,HND,130);
-        Graphs.addEdge(graph,CDG,MNL,130);
-        Graphs.addEdge(graph,HND,TPE,90);
-        Graphs.addEdge(graph,TPE,JFK,320);
-        Graphs.addEdge(graph,TPE,LAX,240);
-        Graphs.addEdge(graph,CDG,HND,130);
-        Graphs.addEdge(graph,CAI,DEN,310);
-        Graphs.addEdge(graph,CAI,DUB,80);
-        Graphs.addEdge(graph,CAI,ICN,110);
-        Graphs.addEdge(graph,ICN,DEN,220);
-        Graphs.addEdge(graph,DEN,OSL,320);
-        Graphs.addEdge(graph,LAX,ICN,430);
-        Graphs.addEdge(graph,LAX,OSL,270);
-        Graphs.addEdge(graph,LAX,IST,290);
-        Graphs.addEdge(graph,IST,DUB,180);
-        Graphs.addEdge(graph,LAX,DUB,190);
-        Graphs.addEdge(graph,JFK,OSL,300);
-        Graphs.addEdge(graph,OSL,SIN,310);
-
-        ConstraintB2(graph, 200);
     }
 }
 

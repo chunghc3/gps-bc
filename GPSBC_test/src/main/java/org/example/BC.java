@@ -77,20 +77,23 @@ public class BC {
 
         //B2
         DijkstraManyToManyShortestPaths<Node, DefaultWeightedEdge> manyToMany = new DijkstraManyToManyShortestPaths<>(graph);
-        Set<Node> sources = Set.of();
-        Set<Node> targets = Set.of();
-        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Node, DefaultWeightedEdge> paths = manyToMany.getManyToManyPaths(sources, targets);
+        Set<Node> sources = new java.util.HashSet<>(Set.of());
+        Set<Node> targets = new java.util.HashSet<>(Set.of());
+
         for(Node node : new ArrayList<>(graph.vertexSet())){
             sources.add(node);
             targets.add(node);
         }
+
+        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Node, DefaultWeightedEdge> paths = manyToMany.getManyToManyPaths(sources, targets);
+
         double numShortestPath = 0;
         Map<Node, Integer> count = new HashMap<>();
-        for (Node source : sources) {
-            for (Node target : targets) {
-                if (source != target && paths.getWeight(source, target) <= pathCostLimit) {
+        for(Node source : sources){
+            for(Node target : targets){
+                if(source != target && paths.getWeight(source, target) >= pathCostLimit){
                     numShortestPath++;
-                    for (Node vertex : paths.getPath(source, target).getVertexList()) {
+                    for(Node vertex : paths.getPath(source, target).getVertexList()){
                         count.put(vertex, count.getOrDefault(vertex, 0) + 1);
                     }
                 }
@@ -104,14 +107,14 @@ public class BC {
                 highestDegree = graph.degreeOf(nodeX);
             }
         }
-
+        System.out.println("HighestDegree: " + highestDegree);
         final int HighestDegree = highestDegree;
         final double shortPathTemp = numShortestPath;
         count.entrySet().stream()
                 .sorted(Map.Entry.<Node, Integer>comparingByValue().reversed())
                 .forEach(e -> {
                             if (graph.degreeOf(e.getKey()) == HighestDegree) {
-                                System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue() / shortPathTemp);
+                                System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue() / shortPathTemp + "...deg: " + graph.degreeOf(e.getKey()));
                             }
                         }
                 );
@@ -121,20 +124,23 @@ public class BC {
 
         //B2
         DijkstraManyToManyShortestPaths<Node, DefaultWeightedEdge> manyToMany = new DijkstraManyToManyShortestPaths<>(graph);
-        Set<Node> sources = Set.of();
-        Set<Node> targets = Set.of();
-        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Node, DefaultWeightedEdge> paths = manyToMany.getManyToManyPaths(sources, targets);
+        Set<Node> sources = new java.util.HashSet<>(Set.of());
+        Set<Node> targets = new java.util.HashSet<>(Set.of());
+
         for(Node node : new ArrayList<>(graph.vertexSet())){
             sources.add(node);
             targets.add(node);
         }
+
+        ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Node, DefaultWeightedEdge> paths = manyToMany.getManyToManyPaths(sources, targets);
+
         double numShortestPath = 0;
         Map<Node, Integer> count = new HashMap<>();
-        for (Node source : sources) {
-            for (Node target : targets) {
-                if (source != target && paths.getWeight(source, target) <= pathCostLimit) {
+        for(Node source : sources){
+            for(Node target : targets){
+                if(source != target && paths.getWeight(source, target) >= pathCostLimit){
                     numShortestPath++;
-                    for (Node vertex : paths.getPath(source, target).getVertexList()) {
+                    for(Node vertex : paths.getPath(source, target).getVertexList()){
                         count.put(vertex, count.getOrDefault(vertex, 0) + 1);
                     }
                 }

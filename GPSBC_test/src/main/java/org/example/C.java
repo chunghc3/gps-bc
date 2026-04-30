@@ -13,28 +13,29 @@ import java.util.Set;
 
 public class C {
 
-    public static void ConstraintC1(Graph<Node, DefaultWeightedEdge> graph, int degreeLimit) {
+    public static void ConstraintC1(Graph<Node, DefaultWeightedEdge> graph) {
         /* Constraint C, Type 1: DEGREE of nodes */ /* Completed */
 
         Graph<Node, DefaultWeightedEdge> graphC1 = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
         //Creates copy of graph
         Graphs.addGraph(graphC1, graph);
 
-        Set<Node> remove = new HashSet<>();
-        for (Node node : new ArrayList<>(graphC1.vertexSet())) {
-            //If the degree of node is less than degreeLimit, remove the node
-            if (graphC1.degreeOf(node) < degreeLimit) {
-                remove.add(node);
+        int busiestDeg = 0;
+        for(Node node : graphC1.vertexSet()){
+            if(graphC1.degreeOf(node) >= busiestDeg){
+                busiestDeg = graphC1.degreeOf(node);
             }
         }
-        remove.forEach(graphC1::removeVertex);
 
+        final int highestDegree = busiestDeg;
+        System.out.println("Highest Degree: " + busiestDeg);
         //Prints out all scores from highest to lowest
         BetweennessCentrality<Node, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphC1);
         Map<Node, Double> scores = bc.getScores();
         scores.entrySet().stream()
+                .filter(e -> graphC1.degreeOf(e.getKey()) == highestDegree)
                 .sorted(Map.Entry.<Node, Double>comparingByValue().reversed())
-                .forEach(e -> System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue()));
+                .forEach(e -> System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue() + "...Deg: " + graphC1.degreeOf(e.getKey())));
     }
 
     public static void ConstraintC2(Graph<Node, DefaultWeightedEdge> graph, int degreeLimit) {
@@ -45,6 +46,6 @@ public class C {
         scores.entrySet().stream()
                 .filter(e -> graph.degreeOf(e.getKey()) <= degreeLimit)
                 .sorted(Map.Entry.<Node, Double>comparingByValue().reversed())
-                .forEach(e -> System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue()));
+                .forEach(e -> System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue()+ "...Deg: " + graph.degreeOf(e.getKey())));
     }
 }

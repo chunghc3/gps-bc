@@ -74,7 +74,7 @@ public class A {
         Map<Node, Double> scores = bc.getScores();
         scores.entrySet().stream()
                 .sorted(Map.Entry.<Node, Double>comparingByValue().reversed())
-                .forEach(e -> System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue()));
+                .forEach(e -> System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue()+ "...Zone:  " + e.getKey().getZone()));
     }
 
     public static void ConstraintA2(Graph<Node, DefaultWeightedEdge> graph, int specifiedZone) {
@@ -95,7 +95,7 @@ public class A {
                 .forEach(
                         (node) -> {
                             if (node.getKey().getZone() == specifiedZone) {
-                                System.out.println(node.getKey().getNodeNumber() + " -> " + node.getValue());
+                                System.out.println(node.getKey().getNodeNumber() + " -> " + node.getValue() + "...Zone:  " + node.getKey().getZone());
                             }
                         }
                 );

@@ -36,7 +36,7 @@ public class AC {
         final int highest = highestDegree;
         System.out.println("Highest Degree: " + highestDegree);
         //BC Calculation
-        BetweennessCentrality<Node, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphAC, true);
+        BetweennessCentrality<Node, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphAC);
         Map<Node, Double> scores = bc.getScores();
         scores.entrySet().stream()
                 .sorted(Map.Entry.<Node, Double>comparingByValue().reversed())
@@ -65,7 +65,7 @@ public class AC {
 
 
         //BC Calculation
-        BetweennessCentrality<Node, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphAC, true);
+        BetweennessCentrality<Node, DefaultWeightedEdge> bc = new BetweennessCentrality<>(graphAC);
         Map<Node, Double> scores = bc.getScores();
         scores.entrySet().stream()
                 .sorted(Map.Entry.<Node, Double>comparingByValue().reversed())
