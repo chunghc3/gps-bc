@@ -45,17 +45,22 @@ public class B {
 
         while(!pq.isEmpty()){
             Node node = pq.poll();
-            System.out.println(node.getNodeNumber() + " -> " + (scores.get(node)*2));
+            System.out.println(node.getNodeNumber() + " -> " + scores.get(node));
         }
     }
 
     public static void ConstraintB2(Graph<Node, DefaultWeightedEdge> graph, double pathWeightLimit){
         /* Constraint B, Type 2: Weight Restriction on PATH */ /* Completed */
 
+//        for (DefaultWeightedEdge e : graph.edgeSet()) {
+//            System.out.println("S: " + graph.getEdgeSource(e).getNodeNumber() + " T: " + graph.getEdgeTarget(e).getNodeNumber() + " W: " + graph.getEdgeWeight(e));
+//        }
+
         //Note: Custom sources and targets
         DijkstraManyToManyShortestPaths<Node, DefaultWeightedEdge> manyToMany = new DijkstraManyToManyShortestPaths<>(graph);
-        Set<Node> sources = new HashSet<>(Set.of());
-        Set<Node> targets = new HashSet<>(Set.of());
+        Set<Node> sources = new HashSet<>();
+        Set<Node> targets = new HashSet<>();
+        Map<Node, Integer> count = new HashMap<>();
         for(Node node : graph.vertexSet()){
             sources.add(node);
             targets.add(node);
@@ -63,15 +68,17 @@ public class B {
         ManyToManyShortestPathsAlgorithm.ManyToManyShortestPaths<Node, DefaultWeightedEdge> paths = manyToMany.getManyToManyPaths(sources, targets);
 
         double numShortestPath = 0;
-        Map<Node, Integer> count = new HashMap<>();
+
         for(Node source : sources){
             for(Node target : targets){
-//                System.out.println("Source: " + source.getNodeNumber() + ", Target: " + target.getNodeNumber() + "path weight: " + paths.getWeight(source, target));
+                System.out.println("Source: " + source.getNodeNumber() + ", Target: " + target.getNodeNumber() + "path weight: " + paths.getWeight(source, target));
                 if(source != target && paths.getWeight(source, target) > pathWeightLimit){
                     numShortestPath++;
                     for(Node vertex : paths.getPath(source, target).getVertexList()){
+                        System.out.println("Nodes on the SP: " + vertex.getNodeNumber());
                         //Update vertex count
                         count.put(vertex, count.getOrDefault(vertex, 0) + 1);
+                        System.out.println("Vertex count for node [ " + vertex.getNodeNumber() + "]: " + count.get(vertex));
                     }
                 }
             }
@@ -80,5 +87,17 @@ public class B {
         count.entrySet().stream()
                 .sorted(Map.Entry.<Node, Integer>comparingByValue().reversed())
                 .forEach(e -> System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue()/shortPathTemp));
+
+//        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingDouble(count::get));
+//        for (Map.Entry<Node, Integer> entry : count.entrySet()) {
+//            pq.offer(entry.getKey()); // Add element
+//            if (pq.size() > 10) {
+//                pq.poll();
+//            }
+//        }
+//        while(!pq.isEmpty()){
+//            Node node = pq.poll();
+//            System.out.println(node.getNodeNumber() + " -> " + count.get(node)/shortPathTemp);
+//        }
     }
 }

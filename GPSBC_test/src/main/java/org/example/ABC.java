@@ -179,23 +179,12 @@ public class ABC {
         }
 
         //C1
-        Set<Node> remove = new HashSet<>();
-        Set<Node> busiest = new HashSet<>();
         int busiestDeg = 0;
         for(Node node : graphABC.vertexSet()){
             if(graphABC.degreeOf(node) >= busiestDeg){
-                busiest.add(node);
                 busiestDeg = graphABC.degreeOf(node);
             }
         }
-        for(Node node : graphABC.vertexSet()){
-            for(Node busiestNode : busiest){
-                if(node != busiestNode){
-                    remove.add(node);
-                }
-            }
-        }
-        remove.forEach(graphABC::removeVertex);
 
         //B2
         //Note: Custom sources and targets
@@ -226,9 +215,15 @@ public class ABC {
         }
 
         final double shortPathTemp = numShortestPath;
+        final double BusiestDegree = busiestDeg;
         count.entrySet().stream()
                 .sorted(Map.Entry.<Node, Integer>comparingByValue().reversed())
-                .forEach(e -> System.out.println(e.getKey().getNodeNumber() + ": " + e.getValue()/shortPathTemp));
+                .forEach(
+                        (node) -> {
+                            if (graphABC.degreeOf(node.getKey()) == BusiestDegree) {
+                                System.out.println(node.getKey().getNodeNumber() + ": " + node.getValue()/shortPathTemp);                          }
+                        }
+                );
     }
 
     public static void A1B2C2(Graph<Node, DefaultWeightedEdge> graph, int specifiedZone, double edgePriceLimit, double pathCostLimit){
