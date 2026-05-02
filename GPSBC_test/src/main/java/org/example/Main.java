@@ -24,6 +24,8 @@ import static org.example.A.ConstraintA2;
 //import static org.example.AB.ConstraintA1B2;
 import static org.example.AB.ConstraintA1B1;
 import static org.example.AB.ConstraintA1B2;
+import static org.example.ABC.ConstraintA1B1C1;
+import static org.example.ABC.ConstraintA1B2C2;
 import static org.example.AC.ConstraintA1C2;
 import static org.example.AC.ConstraintA1C1;
 import static org.example.B.ConstraintB1;
@@ -42,16 +44,16 @@ public class Main {
         GraphGenerator gen = new GraphGenerator();
 
         //vertices, edge probability, weights up to
-        Graph<Node, DefaultWeightedEdge> g = gen.generate(500, 0.7, 1000.0);
+        Graph<Node, DefaultWeightedEdge> g = gen.generate(500, 0.9, 1000.0);
         try {
-            GraphExporter.toJson(g, "graphA1C2.500.json");
+            GraphExporter.toJson(g, "graphA1.500.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         long start = System.nanoTime();
         //FUNCTION
-        ConstraintA1C2(g, 2, 21);
+        ConstraintA1(g,3);
         //FUNCTION END
         long end = System.nanoTime();
         long durationNs = end - start;
